@@ -1,11 +1,11 @@
 from scapy.all import *
 from requests import post
 
-# Home Assistant API URL for starting script
-url = 'http://localhost:8123/api/services/script/turn_on'
+# Home Assistant API URL to trigger event
+url = 'http://localhost:8123/api/services/events/dash_button_pressed'
 headers = {'x-ha-access': '',
            'content-type': 'application/json'}
-json_data = {"entity_id": "script.arrive_home"}
+##json_data = {"entity_id": "script.arrive_home"}
 
 def arp_display(pkt):
   if pkt[ARP].op == 1: #who-has (request)
@@ -13,7 +13,7 @@ def arp_display(pkt):
       if pkt[ARP].hwsrc == 'f0:27:2d:1b:26:58': # Dash button
         print "Dash button pressed!"
         ## call HA API
-        response = post(url, headers=headers, json=json_data)
+        response = post(url, headers=headers)
         print "API called"
         print(response.text)
         print "got API response"
