@@ -2,7 +2,7 @@ from scapy.all import *
 from requests import post
 
 # Home Assistant API URL to trigger event
-url = 'http://localhost:8123/api/services/events/dash_button_pressed'
+url = 'http://localhost:8123/api/events/dash_button_pressed'
 headers = {'x-ha-access': '',
            'content-type': 'application/json'}
 ##json_data = {"entity_id": "script.arrive_home"}

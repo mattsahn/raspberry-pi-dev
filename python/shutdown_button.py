@@ -62,7 +62,7 @@ while True:
              sleep(3)
              GPIO.output(7,GPIO.HIGH)  ##  turn pin 7 (LED) off
               ##  script to be called
-             os.system("sudo restart -h now")  ##  restarts Pi
+             os.system("sudo reboot")  ##  restarts Pi
 
 exit()  ##  terminates this script
 
