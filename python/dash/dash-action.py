@@ -10,7 +10,8 @@ headers = {'x-ha-access': '',
 def arp_display(pkt):
   if pkt[ARP].op == 1: #who-has (request)
     if pkt[ARP].psrc == '0.0.0.0': # ARP Probe
-      if pkt[ARP].hwsrc == 'f0:27:2d:1b:26:58': # Dash button
+      #if pkt[ARP].hwsrc == 'f0:27:2d:1b:26:58': # Dash button
+      if pkt[ARP].hwsrc == '74:c2:46:e5:8c:43': # Dash button
         print "Dash button pressed!"
         ## call HA API
         response = post(url, headers=headers)
