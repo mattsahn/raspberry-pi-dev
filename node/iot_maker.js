@@ -1,4 +1,4 @@
-var https = require('https');
+re('https');
 const AWS = require('aws-sdk');
 
 exports.handler = (event, context, callback) => {
@@ -19,9 +19,24 @@ var postheaders = {
 
 var options = {
   host: 'maker.ifttt.com',
-  port: 8123,
+  port: 80,
   path: '/trigger/' + event.clickType.toLowerCase() + '/with/key/' + iftttMakerSecretKey,
   method: 'POST',
   headers: postheaders
 };
 
+console.log('Sending POST.');
+
+https.request(options, function(res) {
+  console.log('STATUS: ' + res.statusCode);
+  console.log('HEADERS: ' + JSON.stringify(res.headers));
+  res.setEncoding('utf8');
+  res.on('data', function (chunk) {
+    console.log('BODY: ' + chunk);
+  });
+}).end();
+
+
+};
+
+console.log('Exit.')
