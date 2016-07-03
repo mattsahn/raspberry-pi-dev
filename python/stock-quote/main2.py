@@ -25,7 +25,8 @@ def event_handler(event,context):
 
         print("sending to IFTTT : " + ticker + "|" + price + "|" + change)
         message = "The current price of " + ticker + " is " + price + " dollars. " + \
-            "It has changed " + change + " percent from the previous close"
+            "It has changed " + change + " percent from the previous close. " + \
+            "Go BlackRock! Goodbye. "
         r = ifttt_stockquote(message)
 
     elif event['clickType']=='DOUBLE':
