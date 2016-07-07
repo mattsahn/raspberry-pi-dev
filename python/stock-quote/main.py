@@ -13,6 +13,7 @@ def get_stock_data(ticker):
     return r.json()
 
 def ifttt_stockquote(phrase):
+    print phrase
     report = {}
     report["value1"] = phrase
     r = requests.post("https://maker.ifttt.com/trigger/single/with/key/dD37h2LH22FMQNR83Ur-Fl", data=report)    
@@ -26,12 +27,24 @@ def event_handler(event,context):
         price = data['list']['resources'][0]['resource']['fields']['price']
         price = str(round(float(price),2))
         change = data['list']['resources'][0]['resource']['fields']['chg_percent']
+        change = float(change)
+        move = ""
+        if (change < -1.0) :
+            move = "It has gone down a lot, by "
+        elif (change < -.25) :
+            move = "It is down for the day, by "
+        elif (change > 1.0) :
+            move = "It's having a big day, up "
+        elif (change > 0.25) :
+            move = "It's having a strong day, up "
+        else :
+            move = "Not much movement today. It has changed "
+               
         change = str(round(float(change),2))
 
         print("sending to IFTTT : " + ticker + "|" + price + "|" + change)
         message = "The current price of ticker " + ticker + " is " + price + " dollars. " + \
-            "It has changed " + change + " percent from the previous close. " + \
-            "Go BlackRock! Goodbye. "
+            move + change + " percent from the previous close. Goodbye. "
         r = ifttt_stockquote(message)
 
     elif event['clickType']=='DOUBLE':
@@ -57,36 +70,34 @@ def event_handler(event,context):
                 break
             num += 1
 
-        stories += " Go to www dot blackrock blog dot com to read the full stories. Goodbye"
+        stories += " Go to blackrock blog dot com to read the full stories. Goodbye"
         print("sending to IFTTT : " + stories)
         r = ifttt_stockquote(stories)
 
     elif event['clickType']=='LONG':
+        print "Detected LONG press"
     # get first 2 stories from BLK Engineering blog
 
         feed = feedparser.parse('http://rockthecode.io/feed')
-        message = "Here are the three latest stories from the Blackrock Engineering blog: "
-        num = 1
-        for i in range(0,2):
-            message += " Number " + str(num) + ". "
+        message = "Here is the the latest story from the Blackrock Engineering blog: "
+        for i in range(0,1):
             message += feed['entries'][i].title
             html = feed['entries'][i].content
             soup = BeautifulSoup(html[0]['value'],"html5lib")
             text = soup.get_text()
             match = re.search(r'MEETUP SUMMARY(.*)TECH-',text,re.DOTALL)
             message += match.group(1)
-            num += 1
 
-        message += " Go to rock the code dot I O to read the full stories. BlackRock Engineers kick ass! Goodbye"
+        message += " Go to rock the code dot I O to read the full stories. Go BlackRock Engineers. Goodbye"
         r = ifttt_stockquote(message)
 
     else:
         print "Event type not handled"
 
 ## test code
-test_event = { "clickType": "LONG" }
+test_event = { "clickType": "SINGLE" }
 test_context = {}
-event_handler(test_event,test_context)
+#event_handler(test_event,test_context)
 
 print("Done")
 
