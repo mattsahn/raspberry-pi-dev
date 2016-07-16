@@ -94,7 +94,7 @@ def event_handler(event,context):
 ## test code
 test_event = { "clickType": "SINGLE" }
 test_context = {}
-event_handler(test_event,test_context)
+#event_handler(test_event,test_context)
 
 print("Done")
 
