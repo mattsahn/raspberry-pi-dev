@@ -1,5 +1,6 @@
 import requests
 import urllib2
+from googlefinance import getQuotes
 from xml.etree import ElementTree as etree
 import feedparser
 import re
@@ -7,10 +8,6 @@ from bs4 import BeautifulSoup
 
 ticker = "BLK"
 print("executing")
-
-def get_stock_data(ticker):
-    r = requests.get("http://finance.yahoo.com/webservice/v1/symbols/" + ticker + "/quote?format=json&view=%E2%80%8C%E2%80%8Bdetail")
-    return r.json()
 
 def ifttt_stockquote(phrase):
     print phrase
@@ -23,10 +20,10 @@ def event_handler(event,context):
     if event['clickType']=='SINGLE':
         print "Detected SINGLE press"
         print("getting data for " + ticker)
-        data = get_stock_data(ticker)
-        price = data['list']['resources'][0]['resource']['fields']['price']
+        data = getQuotes(ticker)
+        price = data[0]['LastTradePrice']
         price = str(round(float(price),2))
-        change = data['list']['resources'][0]['resource']['fields']['chg_percent']
+        change = data[0]['Change']
         change = float(change)
         move = ""
         if (change < -1.0) :
@@ -97,7 +94,7 @@ def event_handler(event,context):
 ## test code
 test_event = { "clickType": "SINGLE" }
 test_context = {}
-#event_handler(test_event,test_context)
+event_handler(test_event,test_context)
 
 print("Done")
 
