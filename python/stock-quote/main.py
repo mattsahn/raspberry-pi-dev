@@ -25,14 +25,15 @@ def event_handler(event,context):
         price = str(round(float(price),2))
         change = data[0]['Change']
         change = float(change)
+        pct_change = change / float(price)
         move = ""
-        if (change < -1.0) :
+        if (pct_change < -1.5) :
             move = "It has gone down a lot, by "
-        elif (change < -.25) :
+        elif (pct_change < -.25) :
             move = "It is down for the day, by "
-        elif (change > 1.0) :
+        elif (pct_change > 1.5) :
             move = "It's having a big day, up "
-        elif (change > 0.25) :
+        elif (pct_change > 0.25) :
             move = "It's having a strong day, up "
         else :
             move = "Not much movement today. It has changed "
@@ -41,7 +42,7 @@ def event_handler(event,context):
 
         print("sending to IFTTT : " + ticker + "|" + price + "|" + change)
         message = "The current price of ticker " + ticker + " is " + price + " dollars. " + \
-            move + change + " percent from the previous close. Goodbye. "
+            move + change + " dollars from the previous close. Goodbye. "
         r = ifttt_stockquote(message)
 
     elif event['clickType']=='DOUBLE':
