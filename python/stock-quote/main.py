@@ -13,7 +13,7 @@ def ifttt_stockquote(phrase):
     print phrase
     report = {}
     report["value1"] = phrase
-    r = requests.post("https://maker.ifttt.com/trigger/single/with/key/dD37h2LH22FMQNR83Ur-Fl", data=report)    
+    r = requests.post("https://maker.ifttt.com/trigger/single/with/key/bmy6NG6B9J-vRZFhlLY850", data=report)    
     return r
 
 def event_handler(event,context):
